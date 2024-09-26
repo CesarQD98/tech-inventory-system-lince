@@ -9,6 +9,14 @@ const itemSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    deliveryTime: String,
+    deliveryLoc: String,
+    proveedor: String,
+    procedencia: {
+      type: String,
+      enum: ["C", "A", "ND", "N", "E", "O"],
+      default: "O",
+    },
   },
   { timestamps: true }
 );
@@ -18,7 +26,6 @@ itemSchema.set("toJSON", {
     returnedObject.id = returnedObject._id;
     delete returnedObject._id;
     delete returnedObject.__v;
-    // delete returnedObject.createdBy.id;
   },
 });
 

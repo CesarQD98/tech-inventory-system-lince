@@ -6,6 +6,7 @@ const app = express();
 const cors = require("cors");
 
 const handleErrors = require("./middleware/handleErrors");
+const userExtractor = require("./middleware/userExtractor");
 
 const usersRouter = require("./routes/users.routes");
 const itemsRouter = require("./routes/items.routes");
@@ -22,10 +23,14 @@ app.get("/", (request, response) => {
 });
 
 app.use("/api/login", loginRouter);
+// Dado que no se quiere que hayan requests externos a la organización
+// se opta por denegar la creación de usuarios. Se tendrá que realizar
+// vía la db.
 app.use("/api/users", usersRouter);
-app.use("/api/items", itemsRouter);
 
-console.log("Antes del handleErrors!");
+// Asegura que cada request sea con token
+app.use(userExtractor);
+app.use("/api/items", itemsRouter);
 
 app.use(handleErrors);
 
